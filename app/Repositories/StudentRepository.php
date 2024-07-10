@@ -11,8 +11,7 @@ class StudentRepository implements StudentRepositoryInterface
 {
     public function getAllDetails()
     {
-        $students = Student::paginate();
-        return StudentResource::collection($students);
+        return StudentResource::collection(Student::paginate());
     }
 
     public function createStudent(array $data)

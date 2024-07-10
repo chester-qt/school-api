@@ -1,30 +1,25 @@
 <?php
 
-namespace App\Http\Controllers\Api\V1;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreStudentRequest;
 use App\Http\Requests\UpdateStudentRequest;
-use App\Http\Resources\StudentResource;
 use App\Models\Student;
 use App\Services\StudentService;
-use Illuminate\Support\Facades\Mail;
 
 class StudentController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    protected StudentService $student;
-    public function __construct(StudentService $student)
+    private StudentService $studentService;
+
+    public function __construct(StudentService $studentService)
     {
-        $this->student = $student;
+        $this->studentService = $studentService;
     }
 
     public function index()
     {
-        $students = $this->student->getAllDetails();
-        return $this->ok('200', $students, 'success');
+        $students = $this->studentService->getAllDetails();
+        return $this->ok(200, $students, 'success');
     }
 
     /**
