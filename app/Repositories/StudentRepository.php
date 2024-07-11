@@ -5,33 +5,58 @@ namespace App\Repositories;
 
 use App\Contracts\StudentRepositoryInterface;
 use App\Http\Resources\StudentResource;
+use App\Jobs\HandleQueueEmailJob;
 use App\Models\Student;
 
 class StudentRepository implements StudentRepositoryInterface
 {
+    public function __construct(protected Student $student)
+    {
+    }
+
     public function getAllDetails()
     {
-        return StudentResource::collection(Student::paginate());
+        return StudentResource::collection($this->student->paginate());
     }
 
     public function createStudent(array $data)
     {
-        // TODO: Implement createStudent() method.
+        $data = $this->student->create($data);
+
+        return new StudentResource($data);
     }
 
     public function findStudent(int $id)
     {
-        // TODO: Implement findStudent() method.
+        $student = Student::findOrFail($id);
+
+        return new StudentResource($student);
     }
 
     public function deleteStudent(int $id)
     {
-        // TODO: Implement deleteStudent() method.
+        $student = Student::findOrFail($id);
+
+        if (! $student) {
+            return new \Exception('Student not found.');
+        }
+
+        return $student->delete();
     }
 
     public function updateStudent(int $id, array $data)
     {
-        // TODO: Implement updateStudent() method.
+        $student = Student::findOrFail($id);
+
+        if (! $student) {
+            return new \Exception('Student not found.');
+        }
+
+        $updatedStudent = Student::where('id', $student->id)->update($data);
+
+        HandleQueueEmailJob::dispatch($student, request()->user());
+
+        return new StudentResource($updatedStudent);
     }
 
     public function filterStudents($value)
