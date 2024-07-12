@@ -15,16 +15,20 @@ class StudentResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id' => $this->id,
-            'department_id' => $this->department_id,
-            'name' => $this->name,
-            'email' => $this->email,
-            'phone' => $this->phone,
-            'address' => $this->address,
-            'date_of_birth' => $this->date_of_birth,
-            'enrolled' => $this->enrolled,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at
+            'type' => 'student',
+            'attribute' => [
+                'id' => $this->id,
+                'department_id' => $this->department_id,
+                'name' => $this->name,
+                'email' => $this->email,
+                'phone' => $this->phone,
+                'address' => $this->address,
+                'date_of_birth' => $this->date_of_birth,
+                'enrolled' => $this->enrolled,
+                'created_at' => $this->created_at,
+                'updated_at' => $this->updated_at
+            ],
+            'teachers' => TeacherResource::collection($this->whenLoaded('teachers')),
         ];
     }
 }

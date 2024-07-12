@@ -23,6 +23,10 @@ class Student extends Model
         'department_id'
     ];
 
+    protected $casts = [
+        'enrolled' => 'boolean',
+    ];
+
     public function department() : BelongsTo
     {
         return $this->belongsTo(Department::class);

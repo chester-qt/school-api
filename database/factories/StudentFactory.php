@@ -23,7 +23,7 @@ class StudentFactory extends Factory
             'phone' => fake()->phoneNumber(),
             'address' => fake()->address(),
             'date_of_birth' => fake()->dateTime(),
-            'enrolled' => fake()->boolean(),
+            'enrolled' => false,
             'department_id' => Department::factory(),
         ];
     }

@@ -32,16 +32,6 @@ class HandleQueueEmailJob implements ShouldQueue
      */
     public function handle(): void
     {
-        $auth = request()->user();
-
-//        $student = $auth->students->where('email', $auth->email)->first();
-//
-//        if (!$student) {
-//            return;
-//        }
-
-        $student = Student::first();
-        //Mail::to($auth->email)->queue(new EnrolledStudentNotif());
 
     }
 }

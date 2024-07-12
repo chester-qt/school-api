@@ -7,21 +7,24 @@ use App\Contracts\StudentRepositoryInterface;
 use App\Http\Resources\StudentResource;
 use App\Jobs\HandleQueueEmailJob;
 use App\Models\Student;
+use Illuminate\Support\Facades\DB;
 
 class StudentRepository implements StudentRepositoryInterface
 {
-    public function __construct(protected Student $student)
-    {
-    }
+    public function __construct(
+        protected Student $model
+    ) {}
 
     public function getAllDetails()
     {
-        return StudentResource::collection($this->student->paginate());
+        $students = $this->model->with('teachers')->paginate();
+
+        return StudentResource::collection($students);
     }
 
     public function createStudent(array $data)
     {
-        $data = $this->student->create($data);
+        $data = $this->model->create($data);
 
         return new StudentResource($data);
     }
@@ -30,33 +33,39 @@ class StudentRepository implements StudentRepositoryInterface
     {
         $student = Student::findOrFail($id);
 
-        return new StudentResource($student);
+        return new StudentResource($student->load('teachers'));
     }
 
     public function deleteStudent(int $id)
     {
         $student = Student::findOrFail($id);
 
-        if (! $student) {
+        if (!$student) {
             return new \Exception('Student not found.');
         }
 
-        return $student->delete();
+        return $this->model->delete();
     }
 
     public function updateStudent(int $id, array $data)
     {
         $student = Student::findOrFail($id);
 
-        if (! $student) {
+        if (!$student) {
             return new \Exception('Student not found.');
         }
 
-        $updatedStudent = Student::where('id', $student->id)->update($data);
+        $updateStudent = DB::transaction(function () use ($student, $data) {
+            return Student::where('id', $student->id)->update($data);
+        });
 
-        HandleQueueEmailJob::dispatch($student, request()->user());
+        if (!$updateStudent) {
+            return new \Exception('Error updating student.');
+        }
 
-        return new StudentResource($updatedStudent);
+        //HandleQueueEmailJob::dispatch($student, request()->user());
+
+        return new StudentResource(Student::find($student->id));
     }
 
     public function filterStudents($value)

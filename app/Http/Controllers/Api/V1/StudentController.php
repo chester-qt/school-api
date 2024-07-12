@@ -18,7 +18,7 @@ class StudentController extends Controller
     {
         $students = $this->studentService->getAllDetails();
 
-        return $this->ok(200, $students, 'success');
+        return $this->response(200, $students, 'success');
     }
 
     /**
@@ -28,7 +28,7 @@ class StudentController extends Controller
     {
         $student = $this->studentService->createStudent($request->validated());
 
-        return $this->ok(200, $student, 'created');
+        return $this->response(200, $student, 'created');
     }
 
     /**
@@ -38,15 +38,7 @@ class StudentController extends Controller
     {
         $student = $this->studentService->findStudent($id);
 
-        return $this->ok(200, $student, 'found');
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Student $student)
-    {
-        // kapag nag patch nag update yung enrolled to true send email notification
+        return $this->response(200, $student, 'found');
     }
 
     /**
@@ -55,11 +47,8 @@ class StudentController extends Controller
     public function update(UpdateStudentRequest $request, int $id)
     {
         $student = $this->studentService->updateStudent($id, $request->validated());
-    }
 
-    public function test()
-    {
-
+        return $this->response('200', $student, 'updated');
     }
 
     /**
