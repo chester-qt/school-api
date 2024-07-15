@@ -19,7 +19,7 @@ class StudentRepository implements StudentRepositoryInterface
     {
         $students = $this->model->with('teachers')->paginate();
 
-        return StudentResource::collection($students);
+        return Student::all()->toArray();
     }
 
     public function createStudent(array $data)
