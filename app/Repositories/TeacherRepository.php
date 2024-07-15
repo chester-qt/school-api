@@ -6,6 +6,7 @@ use App\Contracts\TeacherRepositoryInterface;
 use App\Http\Resources\TeacherResource;
 use App\Models\Student;
 use App\Models\Teacher;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class TeacherRepository implements TeacherRepositoryInterface
 {
@@ -27,7 +28,18 @@ class TeacherRepository implements TeacherRepositoryInterface
 
     public function editInformation(int $id, array $data)
     {
-        // TODO: Implement editInformation() method.
+        try {
+            $student = $this->model->where('id', $id)->first();
+
+            $student->update($data);
+
+            return new TeacherResource($student);
+
+        } catch (ModelNotFoundException $e) {
+            abort(404);
+        }
+
+
     }
 
     public function deleteStudentInformation(int $id)

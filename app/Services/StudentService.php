@@ -11,9 +11,9 @@ class StudentService implements StudentRepositoryInterface
     public function __construct(protected StudentRepositoryInterface $studentRepository)
     {}
 
-    public function getAllDetails()
+    public function getStudents()
     {
-        return $this->studentRepository->getAllDetails();
+        return $this->studentRepository->getStudents();
     }
 
     public function createStudent(array $data)

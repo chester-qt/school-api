@@ -15,7 +15,7 @@ class StudentRepository implements StudentRepositoryInterface
         protected Student $model
     ) {}
 
-    public function getAllDetails()
+    public function getStudents()
     {
         $students = $this->model->with('teachers')->paginate();
 

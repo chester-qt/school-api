@@ -5,7 +5,7 @@ namespace App\Contracts;
 
 interface StudentRepositoryInterface
 {
-    public function getAllDetails();
+    public function getStudents();
     public function createStudent(array $data);
     public function findStudent(int $id);
     public function deleteStudent(int $id);

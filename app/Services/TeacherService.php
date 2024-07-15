@@ -17,12 +17,12 @@ class TeacherService implements TeacherRepositoryInterface
 
     public function getStudentInformation(int $id)
     {
-        // TODO: Implement getStudentInformation() method.
+
     }
 
     public function editInformation(int $id, array $data)
     {
-        // TODO: Implement editInformation() method.
+        return $this->repository->editInformation($id, $data);
     }
 
     public function deleteStudentInformation(int $id)
